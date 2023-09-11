@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'NavBar.dart'; // Make sure to adjust the import path as needed.
+import 'screens/about.dart';
+
+import 'screens/home.dart';
+
+import 'screens/profile.dart';
+import 'screens/search.dart';
+import 'screens/settings.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -12,85 +18,84 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+int currentindex = 0;
+
 class _MyAppState extends State<MyApp> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    Center(child: Text("Home")),
-    Center(child: Text("Settings")),
-    Center(child: Text("Profile")),
-  ];
-
-  void _onItemTapped(int index) {
+  void onNavIconTap(int index) {
     setState(() {
-      _selectedIndex = index;
+      currentindex = index;
     });
   }
 
+  List pages = [
+    const Home(),
+    const Search(),
+    const Profile(),
+    const About(),
+    const Settings()
+  ];
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: Colors.black.withOpacity(0.5),
         appBar: AppBar(
-          title: Text("Legend"),
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                accountName: Text("Legend"),
-                accountEmail: Text("shedrackogwuche5@gmail.com"),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/passport.jpg"),
-                ),
+          actionsIconTheme: const IconThemeData(color: Colors.red),
+          backgroundColor: Colors.black,
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Good Afternoon, Legend",
+                  style: TextStyle(fontSize: 15)),
+              const Spacer(),
+              const Icon(Icons.diamond),
+              const Text(
+                ' Diamond',
+                style: TextStyle(fontSize: 15),
               ),
-              ListTile(
-                leading: Icon(Icons.home),
-                title: Text("Home"),
-                onTap: () {
-                  Navigator.pop(context); // Close the drawer
-                  _onItemTapped(0); // Navigate to the Home page
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text("Settings"),
-                onTap: () {
-                  Navigator.pop(context); // Close the drawer
-                  _onItemTapped(1); // Navigate to the Settings page
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.person),
-                title: Text("Profile"),
-                onTap: () {
-                  Navigator.pop(context); // Close the drawer
-                  _onItemTapped(2); // Navigate to the Profile page
-                },
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.notifications),
               ),
             ],
           ),
+          
         ),
-        body: _pages[_selectedIndex],
+        body: pages[currentindex],
         bottomNavigationBar: BottomNavigationBar(
-          items: [
+          type: BottomNavigationBarType.fixed,
+          currentIndex: currentindex,
+          backgroundColor: Colors.black,
+          selectedFontSize: 0,
+          unselectedFontSize: 0,
+          onTap: onNavIconTap,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors
+              .red, // Set the unselected item color to grey (or any color you prefer)
+          items: const [
             BottomNavigationBarItem(
-              label: "Home",
               icon: Icon(Icons.home),
+              backgroundColor: Colors.black,
+              label: 'Home', // Add a label for the first item
             ),
             BottomNavigationBarItem(
-              label: "Settings",
-              icon: Icon(Icons.settings),
+              icon: Icon(Icons.search),
+              label: 'Search', // Add a label for the second item
             ),
             BottomNavigationBarItem(
-              label: "Profile",
               icon: Icon(Icons.person),
+              label: 'Profile', // Add a label for the third item
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.favorite),
+              label: 'Favorites', // Add a label for the fourth item
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings', // Add a label for the fifth item
             ),
           ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
         ),
       ),
     );
