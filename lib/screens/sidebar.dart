@@ -1,4 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'home.dart';
+import 'home.dart';
+import 'login.dart';
+import 'profile.dart';
+import 'search.dart';
+import 'about.dart';
+import 'settings.dart';
+
+
+
+
 
 class SideBar extends StatefulWidget {
   const SideBar({super.key});
@@ -10,8 +22,7 @@ class SideBar extends StatefulWidget {
 class SideBarrState extends State<SideBar> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Drawer(
+    return  Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -28,7 +39,11 @@ class SideBarrState extends State<SideBar> {
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text("Home"),
-              onTap: () {},
+              onTap: () {
+                 Get.to(
+                    () => const Home(),
+                  );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.settings),
@@ -46,7 +61,6 @@ class SideBarrState extends State<SideBar> {
             ),
           ],
         ),
-      ),
     );
   }
 }
