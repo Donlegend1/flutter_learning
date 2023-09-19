@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
+// import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'screens/about.dart';
-
 import 'screens/home.dart';
-
+import 'package:get/get.dart';
 import 'screens/profile.dart';
 import 'screens/search.dart';
 import 'screens/settings.dart';
+import 'screens/login.dart';
+import 'screens/splash.dart';
+import 'components/routes.dart';
+import './screens/sidebar.dart';
 
 void main() {
+  Widget widget;
+  String? token = "me"; //CacheHelper.getData(key: 'token');
+  String? userID = "1";
+
+  widget = const Home();
+  if ((token != null && userID != null)) {
+    widget = const Home();
+  } else {
+    widget = const Profile();
+  }
   runApp(const MyApp());
+FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatefulWidget {
@@ -27,18 +43,12 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  List pages = [
-    const Home(),
-    const Search(),
-    const Profile(),
-    const About(),
-    const Settings()
-  ];
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        drawer: const SideBar(),
         backgroundColor: Colors.black.withOpacity(0.5),
         appBar: AppBar(
           actionsIconTheme: const IconThemeData(color: Colors.red),
@@ -60,9 +70,9 @@ class _MyAppState extends State<MyApp> {
               ),
             ],
           ),
-          
         ),
-        body: pages[currentindex],
+        body:const Home(),
+        
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: currentindex,
@@ -71,33 +81,64 @@ class _MyAppState extends State<MyApp> {
           unselectedFontSize: 0,
           onTap: onNavIconTap,
           selectedItemColor: Colors.white,
-          unselectedItemColor: Colors
-              .red, // Set the unselected item color to grey (or any color you prefer)
-          items: const [
+          unselectedItemColor: Colors.red,
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              backgroundColor: Colors.black,
-              label: 'Home', // Add a label for the first item
+              icon: InkWell(
+                onTap: () {
+                  Get.to(
+                    () => const Home(),
+                  ); // Call your navigation function with the index
+                },
+                child: const Icon(Icons.home),
+              ),
+              label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search', // Add a label for the second item
+              icon: InkWell(
+                onTap: () {
+                  Get.to(() =>
+                      const Search()); // Call your navigation function with the index
+                },
+                child: const Icon(Icons.search),
+              ),
+              label: 'Search',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile', // Add a label for the third item
+              icon: InkWell(
+                onTap: () {
+                  Get.to(
+                    () => const Profile(),
+                  ); // Call your navigation function with the index
+                },
+                child: const Icon(Icons.person),
+              ),
+              label: 'Profile',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: 'Favorites', // Add a label for the fourth item
+              icon: InkWell(
+                onTap: () {
+                  Get.to(() =>
+                      const Profile()); // Call your navigation function with the index
+                },
+                child: const Icon(Icons.favorite),
+              ),
+              label: 'Favorites',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings', // Add a label for the fifth item
+              icon: InkWell(
+                onTap: () {
+                  Get.to(() =>
+                      const Home()); // Call your navigation function with the index
+                },
+                child: const Icon(Icons.settings),
+              ),
+              label: 'Settings',
             ),
           ],
         ),
       ),
+      routes: Routes.getRoutes(),
     );
   }
 }
